@@ -1,11 +1,14 @@
-<?php require_once "../../connect.php";?>
+<?php require_once "../../connect.php";
+session_start();
+$_SESSION['admin'] = false;
+?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Admin Login</title>
     <!-- Link to Bootstrap CSS from CDN -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/styles.css">
@@ -26,11 +29,11 @@
 </head>
 <body>
     <div class="login-container">
-        <h1 class="display-4 text-center mb-4">Login</h1>
-        <form id="login-form" method="post" action="#">
+        <h1 class="display-4 text-center mb-4">Admin Login</h1>
+        <form id="admin-login-form" method="post" action="#">
             <div class="mb-3">
-                <label for="email" class="form-label">Email:</label>
-                <input type="email" id="email" name="email" class="form-control" required>
+                <label for="username" class="form-label">Username:</label>
+                <input type="text" id="username" name="username" class="form-control" required>
             </div>
 
             <div class="mb-3">
@@ -40,37 +43,35 @@
 
             <button type="submit" class="btn btn-primary btn-block">Login</button>
         </form>
-        <p class="mt-3 text-center">Don't have an account? <a href="register.php">Register</a></p>
     </div>
 
     <?php
 // If the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $email = $_POST['email'];
+    $username = $_POST['username'];
     $password = $_POST['password'];
-    $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-
-    // Query to check if user exists
-    $query = "SELECT * FROM users WHERE email='$email' AND status=true";
+    // Query to check if admin credentials are correct
+    $query = "SELECT * FROM admin WHERE username='$username'";
     $result = $conn->query($query);
 
     if ($result->num_rows > 0) {
-        // User exists, check password
+        // Admin exists, check password
         $row = $result->fetch_assoc();
         if (password_verify($password, $row['password'])) {
-            // Password is correct, redirect to user-profile.php
-            header("Location: user-profile.php");
+            // Password is correct, redirect to admin-dashboard.php
+            $_SESSION['admin'] = true;
+
+            header("Location: admin-dashboard.php");
             exit;
         } else {
             // Password is incorrect
-            echo '<div class="alert alert-danger" role="alert">Incorrect email or password.</div>';
+            echo '<div class="alert alert-danger" role="alert">Incorrect password.</div>';
         }
     } else {
-        // User does not exist or is not authorized
-        echo '<div class="alert alert-danger" role="alert">You are not yet authorized by the admin. Please Sign up or wait for authorization if already done so.</div>';
+        // Admin does not exist
+        echo '<div class="alert alert-danger" role="alert">Admin not found.</div>';
     }
 }
 ?>
-    <script src="assets/js/auth.js"></script>
 </body>
 </html>
