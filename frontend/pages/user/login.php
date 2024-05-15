@@ -1,4 +1,8 @@
-<?php require_once "../../connect.php";?>
+<?php require_once "../../connect.php";
+session_start();
+unset($_SESSION['user_id']);
+unset($_SESSION['admin']);
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -43,23 +47,29 @@
         <p class="mt-3 text-center">Don't have an account? <a href="register.php">Register</a></p>
     </div>
 
-    <?php
+<?php
+
 // If the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
     $password = $_POST['password'];
-    $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
-    // Query to check if user exists
-    $query = "SELECT * FROM users WHERE email='$email' AND status=true";
-    $result = $conn->query($query);
+    // Query to check if user exists and is authorized
+    $query = "SELECT * FROM users WHERE email=? AND status=true";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
     if ($result->num_rows > 0) {
         // User exists, check password
         $row = $result->fetch_assoc();
         if (password_verify($password, $row['password'])) {
-            // Password is correct, redirect to user-profile.php
-            header("Location: user-profile.php");
+            // Password is correct, set session variables and redirect to index.php
+            $_SESSION['user_id'] = $row['user_id'];
+            $_SESSION['username'] = $row['username'];
+            $_SESSION['email'] = $row['email'];
+            header("Location:index.php");
             exit;
         } else {
             // Password is incorrect
@@ -67,10 +77,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     } else {
         // User does not exist or is not authorized
-        echo '<div class="alert alert-danger" role="alert">You are not yet authorized by the admin. Please Sign up or wait for authorization if already done so.</div>';
+        echo '<div class="alert alert-danger" role="alert">You are not yet authorized by the admin. Please sign up or wait for authorization if already done so.</div>';
     }
+    $stmt->close();
 }
 ?>
+
     <script src="assets/js/auth.js"></script>
 </body>
 </html>

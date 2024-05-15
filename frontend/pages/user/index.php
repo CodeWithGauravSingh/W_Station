@@ -1,128 +1,104 @@
+<?php
+require_once "../../connect.php";
+session_start();
+if (!isset($_SESSION['user_id'])) {
+    header("Location: weather_station_login.php");
+    exit;
+}
+
+// Fetch weather station username from the database
+$user_id = $_SESSION['user_id'];
+$username = $_SESSION['username'];
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Homepage</title>
-  <style>
-    /* CSS */
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      display: flex;
-      height: 100vh;
-    }
-
-    .sidebar {
-      background-color: brown;
-      color: #fff;
-      width: 100px;
-      padding: 20px;
-      display: flex;
-      align-items: center;
-      flex-direction: column;
-      gap: 20px;
-      border-color: black;
-    }
-
-    .sidebar-logo {
-      font-size: 20px;
-      font-weight: bold;
-    }
-
-    .sidebar-nav a {
-      color: #fff;
-      text-decoration: none;
-      display: block;
-      padding: 10px 0;
-      border-bottom: 1px solid #fff; /* Add border-bottom */
-    }
-
-    .sidebar-nav a:last-child { /* Remove border-bottom for the last link */
-      border-bottom: none;
-    }
-
-    .sidebar-nav a:hover {
-      background-color: #444;
-    }
-
-    .content {
-      flex-grow: 1;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 20px;
-      padding: 20px;
-    }
-
-    .card {
-      background-color: #f1f1f1;
-      border-radius: 4px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      padding: 20px;
-    }
-
-    .card-title {
-      font-size: 18px;
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
-
-    .card-content {
-      font-size: 14px;
-      color: #666;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Station Dashboard</title>
+    <!-- Link to Bootstrap CSS from CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .dashboard-container {
+            max-width: 800px;
+            margin: 50px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
+        }
+        .navbar-nav .nav-link.active {
+            font-weight: bold;
+            color: #007bff !important;
+        }
+    </style>
 </head>
 <body>
-  <div class="sidebar">
-    <div class="sidebar-logo">Homepage</div>
-    <nav class="sidebar-nav">
-     <a href="weather.php">Weather</a>
-      <a href="data-analysis.php">Analysis</a>
-      <a href="data-history.php">Past Data</a>
-      <a href="user-profile.php">Profile</a>
-    </nav>
-  </div>
-  <main class="content">
-    <!-- Cards will be dynamically added here -->
-  </main>
+    <div class="dashboard-container">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">Weather Dashboard</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="weather_station_dashboard.php">Dashboard</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="update_upload_settings.php">Update Upload Settings</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="settings.php">Settings</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-danger" href="logout.php">Logout</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
 
-  <script>
-    // JavaScript
-    // Fetch data for the cards
-    fetch('/api/cards')
-      .then(response => response.json())
-      .then(data => {
-        // Render the cards
-        renderCards(data);
-      });
+        <h1 class="display-4 text-center mb-4">Welcome, <?php echo htmlspecialchars($username); ?></h1>
+        <p class="text-center">This is your weather station dashboard. From here, you can manage your weather data and settings.</p>
 
-    function renderCards(data) {
-      const cardsContainer = document.querySelector('.content');
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Dashboard</h5>
+                        <p class="card-text">View your weather data and analytics.</p>
+                        <a href="weather_station_dashboard.php" class="btn btn-primary">Go to Dashboard</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Update Upload Settings</h5>
+                        <p class="card-text">Manage your data upload settings.</p>
+                        <a href="update_upload_settings.php" class="btn btn-primary">Update Settings</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Settings</h5>
+                        <p class="card-text">Update your account settings.</p>
+                        <a href="settings.php" class="btn btn-primary">Go to Settings</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-      data.forEach(card => {
-        const cardElement = createCardElement(card);
-        cardsContainer.appendChild(cardElement);
-      });
-    }
-
-    function createCardElement(card) {
-      const cardElement = document.createElement('div');
-      cardElement.classList.add('card');
-
-      const cardTitle = document.createElement('h3');
-      cardTitle.classList.add('card-title');
-      cardTitle.textContent = card.title;
-
-      const cardContent = document.createElement('p');
-      cardContent.classList.add('card-content');
-      cardContent.textContent = card.content;
-
-      cardElement.appendChild(cardTitle);
-      cardElement.appendChild(cardContent);
-
-      return cardElement;
-    }
-  </script>
+    <!-- Bootstrap JS from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
