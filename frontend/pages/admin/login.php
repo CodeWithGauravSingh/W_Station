@@ -61,7 +61,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Password is correct, redirect to admin-dashboard.php
             $_SESSION['admin'] = true;
 
-            header("Location: admin-dashboard.php");
+            header("Location: index.php");
             exit;
         } else {
             // Password is incorrect

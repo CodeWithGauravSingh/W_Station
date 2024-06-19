@@ -58,7 +58,7 @@ if ($result->num_rows > 0) {
 ?>
             </tbody>
         </table>
-        <a href="admin-logout.php" class="btn btn-danger">Logout</a>
+        <a href="logout.php" class="btn btn-danger">Logout</a>
     </div>
 
     <?php

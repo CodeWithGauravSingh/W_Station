@@ -27,13 +27,19 @@ $username = $_SESSION['username'];
             max-width: 800px;
             margin: 50px auto;
             background-color: #fff;
-            padding: 20px;
+            padding: 30px;
             border-radius: 10px;
-            box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
         .navbar-nav .nav-link.active {
             font-weight: bold;
             color: #007bff !important;
+        }
+        .card {
+            transition: transform 0.2s;
+        }
+        .card:hover {
+            transform: scale(1.05);
         }
     </style>
 </head>
@@ -48,15 +54,6 @@ $username = $_SESSION['username'];
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item">
-                            <a class="nav-link active" href="weather_station_dashboard.php">Dashboard</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="update_upload_settings.php">Update Upload Settings</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="settings.php">Settings</a>
-                        </li>
-                        <li class="nav-item">
                             <a class="nav-link text-danger" href="logout.php">Logout</a>
                         </li>
                     </ul>
@@ -67,17 +64,17 @@ $username = $_SESSION['username'];
         <h1 class="display-4 text-center mb-4">Welcome, <?php echo htmlspecialchars($username); ?></h1>
         <p class="text-center">This is your weather station dashboard. From here, you can manage your weather data and settings.</p>
 
-        <div class="row">
+        <div class="row justify-content-center">
             <div class="col-md-4 mb-4">
                 <div class="card">
                     <div class="card-body text-center">
                         <h5 class="card-title">Dashboard</h5>
                         <p class="card-text">View your weather data and analytics.</p>
-                        <a href="weather_station_dashboard.php" class="btn btn-primary">Go to Dashboard</a>
+                        <a href="station_data.php" class="btn btn-primary">Go to Dashboard</a>
                     </div>
                 </div>
             </div>
-            <div class="col-md-4 mb-4">
+            <!-- <div class="col-md-4 mb-4">
                 <div class="card">
                     <div class="card-body text-center">
                         <h5 class="card-title">Update Upload Settings</h5>
@@ -85,7 +82,7 @@ $username = $_SESSION['username'];
                         <a href="update_upload_settings.php" class="btn btn-primary">Update Settings</a>
                     </div>
                 </div>
-            </div>
+            </div> -->
             <div class="col-md-4 mb-4">
                 <div class="card">
                     <div class="card-body text-center">
