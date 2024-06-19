@@ -3,7 +3,7 @@ session_start();
 require_once "../../connect.php";
 
 if (!isset($_SESSION['user_id'])) {
-    header("Location: weather_station_login.php");
+    header("Location: login.php");
     exit;
 }
 
