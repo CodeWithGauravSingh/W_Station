@@ -31,18 +31,26 @@
         }
         .grid-container {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
             gap: 20px;
+            width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
         }
         .grid-item {
             background: #fff;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             padding: 20px;
-            width: 500px;
-            height: 500px;
+            width: 100%;
+            height: 100%;
+            box-sizing: border-box;
         }
-    </style>
+        canvas {
+            width: 100% !important;
+            height: auto !important;
+        }
+    </style
 </head>
 <body>
     <h1>Weather Dashboard</h1>
